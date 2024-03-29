@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -30,6 +30,11 @@ function RegisterForm() {
     },
   });
   const router = useRouter();
+  const { data: session } = useSession();
+
+  if (session) {
+    router.push("/dashboard");
+  }
 
   const onSubmit = handleSubmit(async (data) => {
     const response = await axios.post("/api/auth/register", data);

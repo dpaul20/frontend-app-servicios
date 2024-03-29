@@ -11,6 +11,9 @@ const nextConfig = {
       {
         hostname: "tailwindui.com",
       },
+      {
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };
