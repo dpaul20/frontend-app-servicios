@@ -21,7 +21,7 @@ function LoginForm() {
   const { data: session } = useSession();
 
   if (session) {
-    router.push("/dashboard");
+    router.push("/services");
   }
 
   const onSubmit = handleSubmit(async (data) => {
@@ -36,7 +36,7 @@ function LoginForm() {
       toast.error("Credenciales inválidas");
     }
 
-    router.push("/dashboard");
+    router.push("/services");
     router.refresh();
   });
 

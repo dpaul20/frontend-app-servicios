@@ -33,7 +33,7 @@ function RegisterForm() {
   const { data: session } = useSession();
 
   if (session) {
-    router.push("/dashboard");
+    router.push("/services");
   }
 
   const onSubmit = handleSubmit(async (data) => {
@@ -51,7 +51,7 @@ function RegisterForm() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push("/services");
     }
   });
 
