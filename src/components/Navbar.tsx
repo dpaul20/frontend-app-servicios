@@ -6,18 +6,19 @@ import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import Loading from "@/app/loading";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-];
+function useActiveNav(
+  items: { name: string; href: string; current: boolean }[]
+) {
+  const pathname = usePathname();
 
-const authNavegation = [
-  { name: "Sign in", href: "/auth/login", current: false },
-  { name: "Sign up", href: "/auth/register", current: false },
-];
+  // Map over the items and return a new array with the 'current' property set
+  return items.map((item) => ({
+    ...item,
+    current: item.href === pathname,
+  }));
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -25,6 +26,22 @@ function classNames(...classes: string[]) {
 
 function Navbar() {
   const { data: session, status } = useSession();
+
+  const navigation = useActiveNav([
+    { name: "Services", href: "/services", current: false },
+    {
+      name: "Professional Services",
+      href: "/professional-services",
+      current: false,
+    },
+    { name: "About us", href: "/about", current: false },
+    { name: "Are you a professional?", href: "/professional", current: false },
+  ]);
+
+  const authNavegation = useActiveNav([
+    { name: "Sign in", href: "/auth/login", current: false },
+    { name: "Sign up", href: "/auth/register", current: false },
+  ]);
 
   if (status === "loading") {
     return <Loading />;
@@ -63,7 +80,7 @@ function Navbar() {
                 <div className="sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -75,7 +92,7 @@ function Navbar() {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -101,11 +118,12 @@ function Navbar() {
                             width={32}
                             height={32}
                             className="rounded-full"
+                            loading="lazy"
                             src={
                               session.user.image ||
                               "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                             }
-                            alt=""
+                            alt={session.user.name || ""}
                           />
                         </Menu.Button>
                       </div>
