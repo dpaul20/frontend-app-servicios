@@ -1,5 +1,5 @@
-import RegisterContainer from "@/components/register/RegisterContainer";
+import RegisterForm from "@/components/register/RegisterForm";
 
 export default function RegisterPAge() {
-  return <RegisterContainer />;
+  return <RegisterForm />;
 }

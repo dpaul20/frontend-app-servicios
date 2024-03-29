@@ -1,6 +1,7 @@
-import LoginContainer from "@/components/login/LoginContainer";
+import LoginForm from "@/components/auth/LoginForm";
+
 
 
 export default function LoginPage() {
-  return <LoginContainer />;
+  return <LoginForm />;
 }
