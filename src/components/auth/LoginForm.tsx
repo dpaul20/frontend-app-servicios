@@ -2,6 +2,7 @@
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -20,9 +21,11 @@ function LoginForm() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  if (session?.user) {
-    router.push("/services");
-  }
+  useEffect(() => {
+    if (session?.user) {
+      router.push("/services");
+    }
+  }, [session, router]);
 
   const onSubmit = handleSubmit(async (data) => {
     const res = await signIn("credentials", {

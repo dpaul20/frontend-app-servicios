@@ -3,6 +3,7 @@ import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -32,9 +33,11 @@ function RegisterForm() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  if (session) {
-    router.push("/services");
-  }
+  useEffect(() => {
+    if (session?.user) {
+      router.push("/services");
+    }
+  }, [session, router]);
 
   const onSubmit = handleSubmit(async (data) => {
     const response = await axios.post("/api/auth/register", data);
@@ -241,28 +244,28 @@ function RegisterForm() {
         </p>
 
         <div className="my-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm leading-5">
-              <span className="px-2 bg-white text-gray-500">
-                {" "}
-                Or continue with{" "}
-              </span>
-            </div>
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
           </div>
+          <div className="relative flex justify-center text-sm leading-5">
+            <span className="px-2 bg-white text-gray-500">
+              {" "}
+              Or continue with{" "}
+            </span>
+          </div>
+        </div>
 
-          <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
-            <button
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={() => signIn("google")}
-            >
-              Google
-            </button>
-            <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-              Facebook
-            </button>
-          </div>
+        <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
+          <button
+            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={() => signIn("google")}
+          >
+            Google
+          </button>
+          <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Facebook
+          </button>
+        </div>
       </div>
     </div>
   );
