@@ -1,5 +1,7 @@
 import axios from "axios";
+import jwt from "jsonwebtoken";
 import { AuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -15,8 +17,8 @@ export const authOptions: AuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: any, req) {
-        const response = await axios.post(
+      async authorize(credentials: any) {
+        const { data, status } = await axios.post(
           process.env.BACKEND_URL + "/auth/signin",
           {
             email: credentials.email,
@@ -24,16 +26,11 @@ export const authOptions: AuthOptions = {
           }
         );
 
-        if (response.status === 401 || response.status === 400) {
-          throw new Error("Invalid credentials");
+        if (status === 201) {
+          return data;
+        } else {
+          return null;
         }
-
-        return {
-          email: response.data.email,
-          name: response.data.name,
-          image: response.data.image,
-          id: response.data.id,
-        };
       },
     }),
     GoogleProvider({
@@ -43,18 +40,11 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-      }
-
-      return token;
+      return { ...token, ...user };
     },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-      }
-
+    async session({ session, token, user }) {
+      session.user.accessToken = token.accessToken as string;
+      session.user.id = token.id as string;
       return session;
     },
   },
