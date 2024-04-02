@@ -1,7 +1,5 @@
 import axios from "axios";
-import jwt from "jsonwebtoken";
 import { AuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
